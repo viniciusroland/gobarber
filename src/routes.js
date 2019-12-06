@@ -16,7 +16,7 @@ const upload = multer(multerConfig)
 
 const routes = new Router()
 
-routes.get('/', (req, res) => {
+routes.get('/', (_, res) => {
   return res.json({ message : 'Olá GoStack', method : 'GET' })
 })
 

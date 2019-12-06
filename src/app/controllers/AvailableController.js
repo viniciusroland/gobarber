@@ -1,5 +1,6 @@
 const { isAfter, format, startOfDay, endOfDay, setHours, setMinutes, setSeconds } = require('date-fns')
 const { Op } = require('sequelize')
+const Appointment = require('../models/Appointment')
 class AvailableController {
   async index(req, res) {
     const { date }  = req.query
@@ -8,7 +9,7 @@ class AvailableController {
     }
 
     const searchDate = Number(date)
-    const appointments = await appointments.findAll({
+    const appointments = await Appointment.findAll({
       where : {
         provider_id : req.params.providerId,
         canceled_at : null,
@@ -16,7 +17,6 @@ class AvailableController {
           [Op.between] : [startOfDay(searchDate), endOfDay(searchDate)]
         }
       }
-
     })
 
     const schedule = [

@@ -15,6 +15,7 @@ async function checkJWTAuth(req, res, next) {
   try {
     const tokenDecoded = await promisify(jwt.verify)(token, authConfig.secret)
     req.userId = tokenDecoded.id
+    console.log('req.userId', req.userId)
 
     return next()
   } catch (err) {

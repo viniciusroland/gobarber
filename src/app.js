@@ -1,5 +1,6 @@
 require('dotenv/config')
 const express = require('express')
+const cors = require('cors')
 require('express-async-errors')
 const routes = require('./routes')
 const { resolve } = require('path')
@@ -22,6 +23,7 @@ class App {
 
   middlewares() {
     this.server.use(Sentry.Handlers.requestHandler())
+    this.server.use(cors())
     this.server.use(express.json())
     this.server.use('/files', express.static(resolve(__dirname, '..', 'tmp', 'uploads')))
 

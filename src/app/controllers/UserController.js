@@ -85,13 +85,22 @@ class UserController {
       return res.status(401).json({ error : 'Wrong password.'})
     }
 
-    const { id, name, provider } = await user.update(req.body)
+    await user.update(req.body)
+    const { id, name, avatar } = await User.findByPk(req.userId, {
+      include : [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url']
+        }
+      ]
+    })
 
     return res.json({
       id,
       name,
       email,
-      provider
+      avatar
     })
   }
 

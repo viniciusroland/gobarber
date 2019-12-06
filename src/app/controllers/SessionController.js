@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const File = require('../models/File')
 
 // yup is a lib to validate data:
 //  check the email,
@@ -23,7 +24,17 @@ class SessionController {
     }
     const { email, password } = req.body
 
-    const user = await User.findOne({ where : { email }})
+    const user = await User.findOne({
+      where : { email },
+      include : [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url']
+        }
+      ]
+    })
+
     if (!user) {
       return res.status(401).json({ error : 'User not found.'})
     }
@@ -31,12 +42,15 @@ class SessionController {
       return res.status(401).json({ error : 'Wrong password!'})
     }
 
-    const { id, name } = user
+    const { id, name, avatar, provider } = user
     return res.json({
       user : {
         id,
         name,
-        email
+        email,
+        avatar,
+        provider
+
       },
       // just passing the id to the token (its possible to pass any object)
       token : jwt.sign({ id }, authConfig.secret, {

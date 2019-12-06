@@ -38,6 +38,7 @@ class AppointmentController {
 
     // check is the date is a past date
     const startHour = startOfHour(parseISO(date))
+    console.log('startHour', startHour)
     if (isBefore(startHour, new Date())) {
       return res.status(400).json({ error : 'Past dates is not allowed.'})
     }
@@ -64,9 +65,10 @@ class AppointmentController {
     const user = await User.findByPk(req.userId)
     const formatedDate = format(
       startHour,
-      "'dia' dd 'de' MMMM', às' H:mm'h'",
+      "'dia' dd 'de' MMMM', às' HH:mm'h'",
       { locale : pt }
     )
+    console.log('formatedDate', formatedDate)
     await Notification.create({
       content : `Novo agendamento de ${user.name} para o ${formatedDate}`,
       user : provider_id
@@ -85,7 +87,7 @@ class AppointmentController {
       order : ['date'],
       attributes : ['id', 'date', 'past', 'cancelable'],
       limit : 20,
-      offset : (page - 1) * 20,
+      //offset : (page - 1) * 20,
       include : [
         {
           model : User,

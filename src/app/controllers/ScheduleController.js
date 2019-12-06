@@ -22,10 +22,10 @@ class ScheduleController {
 
     const { date } = req.query
     const parsedDate = parseISO(date)
+
     const appointments = await Appointment.findAll({
       where : {
-        //provider_id : req.userId,
-        provider_id : 2,
+        provider_id : req.userId,
         canceled_at : null,
         date : {
           [Op.between] : [
