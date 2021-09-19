@@ -36,6 +36,7 @@ class UserController {
     })
   }
   async index(req, res) {
+    console.log("aqui")
     const users = await User.findAll({
       attributes : ['id', 'email', 'name', 'provider'],
       include : [
